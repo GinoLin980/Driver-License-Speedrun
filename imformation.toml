@@ -1,0 +1,5 @@
+ID_NUMBER = "身分證字號"
+BIRTH = "YYYMMDD ex. 0941010"
+NAME = "中文姓名"
+PHONE = "手機電話"
+EMAIL = "電子郵件"
