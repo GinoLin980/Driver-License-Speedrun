@@ -84,7 +84,7 @@ def ask_users_options():
         sys.exit()
     clear_console()
 
-    return {"MVO" : MVO, "Station" : selected_station["ID"], "Retake" : Retake, "Keywords" : keyword}
+    return {"MVO" : MVO, "Station" : selected_station["Station"], "Retake" : Retake, "Keywords" : keyword}
 
 if __name__ == "__main__":
     print(ask_users_options())

@@ -1,0 +1,4 @@
+import toml
+
+a = toml.load("keywords.toml")
+print(a)

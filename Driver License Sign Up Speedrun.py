@@ -25,12 +25,12 @@ NAME = imformation["NAME"]
 PHONE = imformation["PHONE"]
 EMAIL = imformation["EMAIL"]
 
-MVO_ID = data["MVO"]
-STATION_ID = data["Station"]
+MVO = data["MVO"]
+STATION = data["Station"]
 RETAKE = data["Retake"]
 KEYWORDS = data["Keywords"]
 
-MOCK = False
+MOCK = True
 
 def information_validation():
     # Regular expressions
@@ -109,12 +109,12 @@ def driver_license_speedrun():
     date.send_keys(get_latest_sign_date_in_mingguo())
 
     select_placeLv1 = Select(driver.find_element(By.ID, "dmvNoLv1"))
-    select_placeLv1.select_by_value(MVO_ID)
+    select_placeLv1.select_by_visible_text(MVO)
 
     time.sleep(2)
 
     select_place = Select(driver.find_element(By.ID, "dmvNo"))
-    select_place.select_by_value(STATION_ID)
+    select_place.select_by_visible_text(STATION)
 
     search_place = driver.find_element(By.PARTIAL_LINK_TEXT, "查詢場次 Search")
     search_place.click()
