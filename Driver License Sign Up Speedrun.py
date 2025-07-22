@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.common.action_chains import ActionChains
 from apscheduler.schedulers.blocking import BlockingScheduler
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
 import random, time, re, toml, os, sys
 import requests
 import datetime
@@ -10,7 +11,7 @@ from datetime import timedelta
 from dateutil import parser
 from ask_users_options import ask_users_options
 
-if not os.path.exists("msedgedriver.exe"):
+if not os.path.exists("./msedgedriver.exe"):
     print("請下載Microsoft Edge Webdriver並放在與此檔案同目錄")
     input("按Enter 結束...")
     sys.exit()
@@ -30,7 +31,7 @@ STATION = data["Station"]
 RETAKE = data["Retake"]
 KEYWORDS = data["Keywords"]
 
-MOCK = True
+MOCK = False
 
 def information_validation():
     # Regular expressions
@@ -62,35 +63,28 @@ def information_validation():
         input("請按Enter繼續...")
         sys.exit()
 
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo  # Python 3.9+
+
 def get_latest_sign_date_in_mingguo():
-    # Fetch the current time for Taiwan from worldtimeapi.org
-    response = requests.get("http://worldtimeapi.org/api/timezone/Asia/Taipei")
-    data = response.json()
+    # Get the current time in Asia/Taipei timezone
+    taiwan_tz = ZoneInfo("Asia/Taipei")
+    taiwan_time = datetime.now(taiwan_tz)
 
-    # Extract the datetime string from the response
-    datetime_str = data['datetime']
-
-    # Parse the datetime string using dateutil.parser
-    taiwan_time = parser.isoparse(datetime_str)
-
-    # Get the current local time and make it offset-aware
-    local_time = datetime.datetime.now(datetime.timezone.utc).astimezone(taiwan_time.tzinfo)
-
-    # Calculate the difference in minutes
-    time_difference = abs((taiwan_time - local_time).total_seconds() / 60)
-
-    # Allow a 1-minute error margin
-    assert time_difference <= 1, f"本地時間錯誤，有{time_difference:.0f}分鐘誤差。"
+    # Optional: Verify local time offset difference if needed (skipped here because no API)
 
     # Calculate the date 30 days from now
     future_date = taiwan_time + timedelta(days=30)
 
-    # Format the future date
+    # Format the future date in YYYYMMDD
     formatted_future_date = future_date.strftime("%Y%m%d")
-    formatted_future_date_mingguo = str(int(formatted_future_date[:4]) - 1911) + formatted_future_date[4:]
 
-    return formatted_future_date_mingguo
+    # Convert Gregorian year to Minguo year (Taiwan year)
+    # Minguo year = Gregorian year - 1911
+    minguo_year = int(formatted_future_date[:4]) - 1911
+    formatted_future_date_minguo = str(minguo_year) + formatted_future_date[4:]
 
+    return formatted_future_date_minguo
 
 def driver_license_speedrun():
     options = webdriver.EdgeOptions()
